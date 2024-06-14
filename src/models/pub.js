@@ -17,6 +17,7 @@ const commentSchema = new Schema(
     timestamps: { createdAt: true, updatedAt: false },
   }
 );
+
 const pubSchema = new Schema(
   {
     id_user: {
@@ -27,6 +28,10 @@ const pubSchema = new Schema(
     title: {
       type: String,
       required: true,
+    },
+    content: {
+      type: String,
+      required: false,
     },
     image: {
       publicId: {

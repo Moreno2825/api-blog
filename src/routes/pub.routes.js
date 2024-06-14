@@ -1,14 +1,26 @@
 import { Router } from "express";
-import * as pubController from "../controllers/pub/pub.controller.js";
+import * as pubController from "../controllers/pub.controller.js";
 import fileUpload from "express-fileupload";
 
 //! inicializar la funcion
 const router = Router();
 
 router.post(
-  "/create/pub",
+  "/pubs/create",
   fileUpload({ useTempFiles: true, tempFileDir: "./uploads" }),
   pubController.postPub
 );
+router.get("/pubs/getAll", pubController.getAllPub);
+router.get("/pubs/:id", pubController.getById);
+router.put(
+  "/pubs/put/:id",
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "./uploads",
+  }),
+  pubController.updatePub
+);
+router.delete("/pubs/delete/:id", pubController.deletePub);
+router.post("/pubs/comment", pubController.postComment);
 
 export default router;
