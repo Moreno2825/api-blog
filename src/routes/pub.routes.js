@@ -12,6 +12,7 @@ router.post(
 );
 router.get("/pubs/getAll", pubController.getAllPub);
 router.get("/pubs/:id", pubController.getById);
+router.get('/user/:id', pubController.getAllPubsByUser);
 router.put(
   "/pubs/put/:id",
   fileUpload({

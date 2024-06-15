@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import { uploadImage, deleteImage } from "../utils/cloudinary.js";
 import fs from "fs-extra";
 import { handleNotFound } from "../helpers/validateHelper.js";
+import mongoose from "mongoose";
 
 /**
  * @function Crear Publicacion
@@ -110,6 +111,42 @@ export const getAllPub = async (req, res) => {
   }
 };
 
+export const getAllPubsByUser = async (req, res) => {
+  const { id } = req.params;
+
+  // Verificar si el id es un ObjectId válido
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
+
+  try {
+    const pubs = await Pub.find({ id_user: id }).populate("id_user");
+
+    if (!pubs.length) {
+      return handleNotFound(res, "Publicaciones");
+    }
+
+    const pubsFiltered = pubs.map((pub) => ({
+      _id: pub._id,
+      user: {
+        _id: pub.id_user._id,
+        name: pub.id_user.name,
+      },
+      title: pub.title,
+      content: pub.content,
+      image: pub.image,
+      comment: pub.comment,
+    }));
+
+    const response = {
+      pubs: pubsFiltered,
+      total: pubsFiltered.length,
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ message: "Error", Error: error.message });
+  }
+};
 /**
  * @function Consultar Publicacion
  *
