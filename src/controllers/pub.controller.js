@@ -85,7 +85,16 @@ export const postComment = async (req, res) => {
  */
 export const getAllPub = async (req, res) => {
   try {
-    const pubs = await Pub.find().populate("id_user");
+    const pubs = await Pub.find()
+      .populate("id_user")
+      .populate({
+        path: "comment",
+        populate: {
+          path: "id_user",
+          model: "User",
+          select: "_id name",
+        },
+      });
 
     if (!pubs) return handleNotFound(res, Pub);
 
