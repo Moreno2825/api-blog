@@ -5,7 +5,7 @@ import { verifyDuplicateEmail } from "../middleware/verifySignUp.js";
 //! inicializar la funcion
 const router = Router();
 
-router.post("/signup", verifyDuplicateEmail, authController.SignUp);
+router.post("/signup", authController.SignUp);
 router.post("/signin", authController.SignIn);
 
 export default router;
